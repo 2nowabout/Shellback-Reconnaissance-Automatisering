@@ -1,0 +1,30 @@
+Welcome to the repeatable pentest.
+
+
+
+--------------------First Time Setup------------------------------
+If you freshly downloaded this "tool" please make sure you unzip de
+hoppenbrouwerscustom.zip in Resources/passwordCrack as this is the
+default cracklist to check for weak passwords that have to do with
+the company itself.
+Make sure you have installed the following:
+Mentalist:
+https://github.com/sc0tfree/mentalist
+Hydra:
+https://tools.kali.org/password-attacks/hydra
+Nikto:
+https://tools.kali.org/information-gathering/nikto
+
+------------------------------------------------------------------
+
+--------------------The Scripts-----------------------------------
+You have 2 options of running the scripts. You can run the main
+script that will go over all the options and will run everything.
+The other option is running the python scripts individually.
+
+You can run the main script by opening the kali linux terminal
+and type "python3 mainScript.py"
+
+to run a individual script replace the mainScript.py with the
+script you want to use (example: python3 NetworkScanner.py 0)
+------------------------------------------------------------------

@@ -1,0 +1,4 @@
+Results/NetworkScan/*.txt
+Results/PasswordCracker/*.txt
+Results/WebScanner/*.txt
+.idea
