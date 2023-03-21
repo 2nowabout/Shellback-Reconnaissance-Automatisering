@@ -27,11 +27,11 @@ class myThread(threading.Thread):  # thread definition updated in python 3.0
 def run_scan(adress, threadName, version):  # scan def for threads to run
     print(threadName + " works")
     stream = os.popen(
-        'nmap -sV --script=vulscan/vulscan.nse --script-args vulscanshowall=1 -T2 -v -Pn -A ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
+        'sudo nmap -sU -sS --script smb-security-mode.nse -p U:137,T:139,445 ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
     output = stream.read()
     adressfordocument = adress.replace(".", "_")
     adressfordocument = str(adressfordocument)
-    t = open("Results/NetworkScan/" + adressfordocument + ".txt", "w+")  # make a text file with the name of the adress
+    t = open("Results/SMBScan/" + adressfordocument + ".txt", "w+")  # make a text file with the name of the adress
     t.write(output)  # fill the text file
     t.close()
 

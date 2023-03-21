@@ -99,16 +99,12 @@ def run_scan(command):  # scan def for threads to run
 def automated_scan():
     #Gathering information first:
     os.system("sudo python3 IpRangeScanner.py")
-
-
-
-
     threads = []
     threadnumber = 1
     stillWorking = True
     commands = []
-    commands.append("sudo python3 NetworkScanner.py 1")
-    commands.append("sudo python3 WebsiteScanner.py 1")
+    commands.append("sudo python3 NetworkScanner.py")
+    commands.append("sudo python3 SMBScanner.py")
     for i in commands:
         thread = myThread(threadnumber, "Thread-" + str(threadnumber), i)  # creating thread
         thread.start()
