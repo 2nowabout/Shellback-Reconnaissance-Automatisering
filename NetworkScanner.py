@@ -15,9 +15,9 @@ class myThread(threading.Thread):  # thread definition updated in python 3.0
         self.version = version
 
     def run(self):
-        print("Starting " + self.name)
+        print("Starting NMAP " + self.name)
         run_scan(self.adress, self.name, self.version)  #run_scan uitvoeren als main methode
-        print("Exiting " + self.name)
+        print("Exiting NMAP " + self.name)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -25,7 +25,6 @@ class myThread(threading.Thread):  # thread definition updated in python 3.0
 # ---------------------------------------------Methodes------------------------------------------------------------------
 
 def run_scan(adress, threadName, version):  # scan def for threads to run
-    print(threadName + " works")
     stream = os.popen(
         'nmap -sV --script=vulscan/vulscan.nse --script-args vulscanshowall=1 -T2 -v -Pn -A ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
     output = stream.read()
@@ -52,7 +51,7 @@ version = 0
 #            version = int(setting.split("=")[1])
 
 for x in f1:
-    while threading.activeCount() > 10:  # dont go above 10 threads at the same time
+    while threading.active_count() > 10:  # dont go above 10 threads at the same time
         print("max threads achived, waiting for space")
         time.sleep(10)
     thread = myThread(1, "Thread-" + str(threadnumber), x, version)  # creating thread

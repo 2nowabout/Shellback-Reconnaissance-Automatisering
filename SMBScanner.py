@@ -15,26 +15,37 @@ class myThread(threading.Thread):  # thread definition updated in python 3.0
         self.version = version
 
     def run(self):
-        print("Starting " + self.name)
-        run_scan(self.adress, self.name, self.version)  #run_scan uitvoeren als main methode
-        print("Exiting " + self.name)
+        print("Starting SMB " + self.name)
+        if version == 1:
+            run_SMBProtocol_scan(self.adress, self.name, self.version)  #run_scan uitvoeren als main methode
+        elif version == 2:
+            run_SMB2_scan()
+        print("Exiting SMB " + self.name)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------Methodes------------------------------------------------------------------
 
-def run_scan(adress, threadName, version):  # scan def for threads to run
-    print(threadName + " works")
+def run_SMBProtocol_scan(adress, threadName, version):  # scan def for threads to run
     stream = os.popen(
-        'sudo nmap -sU -sS --script smb-security-mode.nse -p U:137,T:139,445 ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
+        'sudo nmap --script=smb-protocols -p 137,139,445 ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
     output = stream.read()
     adressfordocument = adress.replace(".", "_")
-    adressfordocument = str(adressfordocument)
+    adressfordocument = str(adressfordocument) + "-Protocols"
     t = open("Results/SMBScan/" + adressfordocument + ".txt", "w+")  # make a text file with the name of the adress
     t.write(output)  # fill the text file
     t.close()
 
+def run_SMB2_scan(adress, threadName, version):  # scan def for threads to run
+    stream = os.popen(
+        'sudo nmap --script=smb-protocols -p 137,139,445 ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
+    output = stream.read()
+    adressfordocument = adress.replace(".", "_")
+    adressfordocument = str(adressfordocument) + "-SMB2"
+    t = open("Results/SMBScan/" + adressfordocument + ".txt", "w+")  # make a text file with the name of the adress
+    t.write(output)  # fill the text file
+    t.close()
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -52,12 +63,15 @@ version = 0
 #            version = int(setting.split("=")[1])
 
 for x in f1:
-    while threading.activeCount() > 10:  # dont go above 10 threads at the same time
+    while threading.active_count() > 10:  # dont go above 10 threads at the same time
         print("max threads achived, waiting for space")
         time.sleep(10)
-    thread = myThread(1, "Thread-" + str(threadnumber), x, version)  # creating thread
+    thread = myThread(1, "Thread-" + str(threadnumber), x, 1)  # creating thread
+    thread2 = myThread(1, "Thread-" + str(threadnumber), x, 1)
     thread.start()   # starten van thread. hier word de def run uitgevoerd van de thread
+    thread2.start()
     threads.append(thread)  # add to pool
+    threads.append(thread2)
     threadnumber += 1
 
 f.close()

@@ -25,6 +25,9 @@ class myThread(threading.Thread):  # thread definition updated in python 3.0
         print("Exiting " + self.name)
 
 
+# ---------------------------------------------Methodes------------------------------------------------------------------
+
+
 def execute_command(command):
     # remove all the extra parameters from the socket connection and only work with json file
     foundbegin = False
@@ -48,8 +51,15 @@ def execute_command(command):
             automated_scan()
         case "update_settings":
             settings = json_object["settings"]
+            update_settings(settings)
         case _:
             return
+
+def update_settings(json):
+    websiteadresses = json["websites"]
+    f = open("Resources/websiteScanner" + "ipToScan" + ".txt", "w+")
+    f.write(json.dumps(websiteadresses))
+
 
 
 def listToString(s):
@@ -97,7 +107,6 @@ def server_socket():
                 buffer = ""
                 break
             else:
-                print(data)
                 execute_command(listToString(data))
                 conn.send(b'''HTTP/1.0 200 OK
 Content-Type: text/plain
@@ -107,8 +116,6 @@ Connection successful
 ''')
                 conn.close()
 
-
-# ---------------------------------------------Methodes------------------------------------------------------------------
 
 def clear():
     os.system("clear")
@@ -120,7 +127,9 @@ def run_scan(command):  # scan def for threads to run
 
 def automated_scan():
     # Gathering information first:
+    print("executing ip range scan")
     os.system("sudo python3 IpRangeScanner.py")
+    print("scan done")
     threads = []
     threadnumber = 1
     stillWorking = True
