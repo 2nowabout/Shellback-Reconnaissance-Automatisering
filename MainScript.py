@@ -136,6 +136,7 @@ def automated_scan():
     commands = []
     commands.append("sudo python3 NetworkScanner.py")
     commands.append("sudo python3 SMBScanner.py")
+    commands.append("sudo python3 WebsiteScanner.py")
     for i in commands:
         thread = myThread(threadnumber, "Thread-" + str(threadnumber), i)  # creating thread
         thread.start()

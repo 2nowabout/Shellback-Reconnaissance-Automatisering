@@ -16,7 +16,7 @@ class myThread(threading.Thread):  # thread definition updated in python 3.0
 
     def run(self):
         print("Starting " + self.threadName)
-        crack_password(self.threadName, self.ip)
+        move_file(self.threadName, self.ip)
         print("Exiting " + self.threadName)
 
 
@@ -30,7 +30,7 @@ automated = False
 
 # ---------------------------------------------Methodes------------------------------------------------------------------
 
-def crack_password(threadName, ip):  # scan def for threads to run
+def move_file(threadName, ip):  # scan def for threads to run
     print(threadName + " works")
     adjustedx = ip.replace("/", "_") # cant write a file with a / in the name
     os.system("sudo nikto -o " + adjustedx + ".txt -Format txt -Tuning x 6 -Option USERAGENT=Mozilla -h " + ip + " -ssl -C all") # nikto scan on ip, Tuning 6 enables all except DOS scans
@@ -42,31 +42,18 @@ def runScan():
     threadnumber = 1
     f = open("Resources/websiteScanner/ipToScan")  # reading file with ips in it to use
     f1 = f.readlines()
-    for x in f1:
-        while threading.activeCount() > 4:  # dont go above 4 threads at the same time
-            print("max threads achived, waiting for space")
-            time.sleep(10)
-        thread = myThread(1, "Thread-" + str(threadnumber), x)  # creating thread
-        thread.start()
-        threads.append(thread)  # add to pool
-        threadnumber += 1
+    if f1.__len__() > 0:
+        for x in f1:
+            while threading.active_count() > 4:  # dont go above 4 threads at the same time
+                print("max threads achived, waiting for space")
+                time.sleep(10)
+            thread = myThread(1, "Thread-" + str(threadnumber), x)  # creating thread
+            thread.start()
+            threads.append(thread)  # add to pool
+            threadnumber += 1
 # ----------------------------------------------------------------------------------------------------------------------
 
 
+runScan()
 
-
-if(sys.argv[1] == "1"):
-    automated = True
-if not automated:
-    print("Website scanner activated!")
-    print("Before starting make sure you put the ip in the specific folder!")
-    print("this scan can take around an hour per ip so hold tight!")
-    start = input("are you ready? (yes/no): ")
-    start = start.lower()
-    if start == "yes":
-        approvedstart = True
-    if approvedstart:
-        runScan()
-elif automated:
-    runScan()
 
