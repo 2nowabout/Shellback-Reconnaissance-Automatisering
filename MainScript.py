@@ -1,14 +1,14 @@
-import os
-import threading
-import time
-import sys
-import socket
 import json
+import os
+import socket
+import sys
+import threading
 
 PORT = 8192
 HOST = ''
 data = []
 BUFFER_SIZE = 1
+
 
 # -------------------------------------Thread definition----------------------------------------------------------------
 
@@ -25,10 +25,37 @@ class myThread(threading.Thread):  # thread definition updated in python 3.0
         print("Exiting " + self.name)
 
 
+def execute_command(command):
+    # remove all the extra parameters from the socket connection and only work with json file
+    foundbegin = False
+    execute = ""
+    for i in command:
+        if (i == "{"):
+            foundbegin = True
+        if (foundbegin):
+            execute += i
+
+    # load string to json
+    try:
+        json_object = json.loads(execute)
+    except:
+        print("command was not a json file")
+        return
+
+    # read command from json and execute appropriately
+    match json_object["command"]:
+        case "start":
+            automated_scan()
+        case "update_settings":
+            settings = json_object["settings"]
+        case _:
+            return
+
+
 def listToString(s):
     # initialize an empty string
     str1 = ""
-
+    s = s.decode('utf-8')
     # traverse in the string
     for ele in s:
         if ele != ";":
@@ -57,47 +84,42 @@ def server_socket():
         sys.exit()
     soc.listen(3)
 
+    message = ''
     while 1:  # Accept connections from multiple clients
         conn, addr = soc.accept()
         while 1:  # Accept multiple messages from each client
-            buffer = conn.recv(BUFFER_SIZE)
-            buffer = buffer.decode()
-            if buffer == ";":
+            # buffer = conn.recv(BUFFER_SIZE)
+            # buffer = buffer.decode()
+            data = conn.recv(1024)
+            if not data:
                 conn.close()
-                print(listToString(data))
+                data.clear()
+                buffer = ""
                 break
-            elif buffer:
-                data.append(buffer)
             else:
-                break
+                print(data)
+                execute_command(listToString(data))
+                conn.send(b'''HTTP/1.0 200 OK
+Content-Type: text/plain
 
+Connection successful
 
+''')
+                conn.close()
 
-def execute_command(command):
-    try:
-        json_object = json.load(command)
-    except:
-        print("command was not a json file")
-        return
-
-    match json_object["command"]:
-        case "start":
-            automated_scan()
-        case "update_settings":
-            settings = json_object["settings"]
-            settings
 
 # ---------------------------------------------Methodes------------------------------------------------------------------
 
 def clear():
     os.system("clear")
 
+
 def run_scan(command):  # scan def for threads to run
     os.system(command)
 
 
 def automated_scan():
-    #Gathering information first:
+    # Gathering information first:
     os.system("sudo python3 IpRangeScanner.py")
     threads = []
     threadnumber = 1
@@ -125,11 +147,11 @@ def automated_scan():
         if not alive:
             stillWorking = False
 
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 server_socket()
-
 
 # if fullanswer == "yes":
 #     PasswordCracking = True
