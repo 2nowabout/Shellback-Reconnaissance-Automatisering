@@ -39,7 +39,7 @@ def run_SMBProtocol_scan(adress, threadName, version):  # scan def for threads t
 
 def run_SMB2_scan(adress, threadName, version):  # scan def for threads to run
     stream = os.popen(
-        'sudo nmap --script=smb-protocols -p 137,139,445 ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
+        'sudo nmap --script=smb2-security-mode -p 137,139,445 ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
     output = stream.read()
     adressfordocument = adress.replace(".", "_")
     adressfordocument = str(adressfordocument) + "-SMB2"
