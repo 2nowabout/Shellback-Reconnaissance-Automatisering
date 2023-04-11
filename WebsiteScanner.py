@@ -45,7 +45,7 @@ def runScan():
     if f1.__len__() > 0:
         for x in f1:
             while threading.active_count() > 4:  # dont go above 4 threads at the same time
-                print("max threads achived, waiting for space")
+                print("Website scanner max threads achived, waiting for space\n")
                 time.sleep(10)
             thread = myThread(1, "Thread-" + str(threadnumber), x)  # creating thread
             thread.start()

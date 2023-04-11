@@ -64,7 +64,7 @@ version = 0
 
 for x in f1:
     while threading.active_count() > 10:  # dont go above 10 threads at the same time
-        print("max threads achived, waiting for space")
+        print("SMB Scanner max threads achived, waiting for space\n")
         time.sleep(10)
     thread = myThread(1, "Thread-" + str(threadnumber), x, 1)  # creating thread
     thread2 = myThread(1, "Thread-" + str(threadnumber), x, 1)
