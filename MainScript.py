@@ -162,22 +162,3 @@ def automated_scan():
 
 
 server_socket()
-
-# if fullanswer == "yes":
-#     PasswordCracking = True
-#     NetworkScanner = True
-#     WebsiteScanner = True
-#     print("DONT FORGET TO FILL AUTOMATIONSETTINGS FILE FOR THIS:")
-#     fullatomation = input("Enable full automation? yes/no (make sure the full automation file is filled)")
-#     if fullatomation == "yes":
-#         FullAutomation = True
-#         runtester = input("do you want to check the input files if everything is correct? yes/no")
-#         if (runtester == "yes"):
-#             os.system("python3 FileTester.py")
-#             pause = input("if everything is correct press enter, otherwise cancel and adjust settings")
-#
-# if FullAutomation:
-#     automated_scan()
-#
-# if not FullAutomation:
-#     start_all_scan_normal(PasswordCracking, NetworkScanner, WebsiteScanner)
