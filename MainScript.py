@@ -160,5 +160,10 @@ def automated_scan():
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-
-server_socket()
+if len(sys.argv) > 0:
+    if sys.argv[0] == "-nowait":
+        automated_scan()
+    else:
+        print("that is not a valid argurment for this script! only -nowait is supported!")
+else:
+    server_socket()
