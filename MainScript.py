@@ -3,12 +3,12 @@ import os
 import socket
 import sys
 import threading
+import urllib
 
 PORT = 8192
 HOST = ''
 data = []
 BUFFER_SIZE = 1
-
 
 # -------------------------------------Thread definition----------------------------------------------------------------
 
