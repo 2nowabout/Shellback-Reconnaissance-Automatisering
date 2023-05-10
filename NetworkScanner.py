@@ -1,8 +1,12 @@
 import os
 import threading
 import time
+import json
 import sys
 
+import requests
+
+from Sender import sendMessagePost
 
 # -------------------------------------Thread definition----------------------------------------------------------------
 
@@ -26,7 +30,7 @@ class myThread(threading.Thread):  # thread definition updated in python 3.0
 
 def run_scan(adress, threadName, version):  # scan def for threads to run
     stream = os.popen(
-        'nmap -sV --script=vulscan/vulscan.nse --script-args vulscanshowall=1 -T2 -v -Pn -A ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
+        'nmap -sV --script=vulscan/vulscan.nse --script-args vulscandb=cve.csv -T2 -v -Pn -A ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
     output = stream.read()
     adressfordocument = adress.replace(".", "_")
     adressfordocument = str(adressfordocument)
@@ -61,3 +65,8 @@ for x in f1:
 
 f.close()
 f1.clear()
+
+ip = requests.get('https://checkip.amazonaws.com').text.strip()
+json = json.loads('{"type":5,"ipadress":"' + ip + '","value":"nmap vulscan complete"}')
+sendMessagePost("addNotification", json)
+

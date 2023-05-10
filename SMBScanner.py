@@ -2,7 +2,10 @@ import os
 import threading
 import time
 import sys
+import requests
+import json
 
+from Sender import sendMessagePost
 
 # -------------------------------------Thread definition----------------------------------------------------------------
 
@@ -76,3 +79,7 @@ for x in f1:
 
 f.close()
 f1.clear()
+
+ip = requests.get('https://checkip.amazonaws.com').text.strip()
+json = json.loads('{"type":5,"ipadress":"' + ip + '","value":"SMB scanning complete"}')
+sendMessagePost("addNotification", json)

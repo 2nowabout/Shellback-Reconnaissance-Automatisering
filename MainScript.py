@@ -92,7 +92,7 @@ def server_socket():
               + str(message[0]) + ' Message '
               + message[1])
         sys.exit()
-    soc.listen(3)
+    soc.listen(5)
 
     message = ''
     while 1:  # Accept connections from multiple clients
@@ -109,11 +109,9 @@ def server_socket():
             else:
                 execute_command(listToString(data))
                 conn.send(b'''HTTP/1.0 200 OK
-Content-Type: text/plain
-
-Connection successful
-
-''')
+                          Content-Type: text/plain
+                          Connection successful
+                          ''')
                 conn.close()
 
 
@@ -132,7 +130,6 @@ def automated_scan():
     print("scan done")
     threads = []
     threadnumber = 1
-    stillWorking = True
     commands = []
     commands.append("sudo python3 NetworkScanner.py")
     commands.append("sudo python3 SMBScanner.py")
@@ -142,20 +139,6 @@ def automated_scan():
         thread.start()
         threads.append(thread)  # add to pool
         threadnumber = threadnumber + 1
-
-    while stillWorking:
-        alive = False
-        # clear()
-        # whatThread = 0
-        # for i in threads:
-        #     whatThread = whatThread + 1
-        #     if i.is_alive():
-        #         alive = True
-        #         print("thread " + str(whatThread) + " is Working...")
-        #     elif not i.is_alive():
-        #         print("thread " + str(whatThread) + " is Done")
-        if not alive:
-            stillWorking = False
 
 
 # ----------------------------------------------------------------------------------------------------------------------

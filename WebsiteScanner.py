@@ -3,6 +3,10 @@ import time
 import threading
 import shutil
 import sys
+import requests
+import json
+
+from Sender import sendMessagePost
 
 
 # -------------------------------------Thread definition----------------------------------------------------------------
@@ -32,13 +36,16 @@ automated = False
 
 def move_file(threadName, ip):  # scan def for threads to run
     print(threadName + " works")
-    adjustedx = ip.replace("/", "_") # cant write a file with a / in the name
-    os.system("sudo nikto -o " + adjustedx + ".txt -Format txt -Tuning x 6 -Option USERAGENT=Mozilla -h " + ip + " -ssl -C all") # nikto scan on ip, Tuning 6 enables all except DOS scans
-    shutil.copy(adjustedx + ".txt", 'Results/WebScanner/') # copy file to the right place
-    if os.path.exists(adjustedx + ".txt"): # checking after copy if everything is oke
-        os.remove(adjustedx + ".txt") # deleting old file in the wrong location
+    adjustedx = ip.replace("/", "_")  # cant write a file with a / in the name
+    os.system(
+        "sudo nikto -o " + adjustedx + ".txt -Format txt -Tuning x 6 -Option USERAGENT=Mozilla -h " + ip + " -ssl -C all")  # nikto scan on ip, Tuning 6 enables all except DOS scans
+    shutil.copy(adjustedx + ".txt", 'Results/WebScanner/')  # copy file to the right place
+    if os.path.exists(adjustedx + ".txt"):  # checking after copy if everything is oke
+        os.remove(adjustedx + ".txt")  # deleting old file in the wrong location
 
-def runScan():
+
+def runscan():
+    import json
     threadnumber = 1
     f = open("Resources/websiteScanner/ipToScan")  # reading file with ips in it to use
     f1 = f.readlines()
@@ -51,9 +58,13 @@ def runScan():
             thread.start()
             threads.append(thread)  # add to pool
             threadnumber += 1
+
+    ip = requests.get('https://checkip.amazonaws.com').text.strip()
+    json = json.loads('{"type":5,"ipadress":"' + ip + '","value":"SMB scanning complete"}')
+    sendMessagePost("addNotification", json)
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-runScan()
-
-
+runscan()
