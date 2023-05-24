@@ -4,6 +4,9 @@ import socket
 import sys
 import threading
 import urllib
+from time import sleep
+
+import requests
 
 PORT = 8192
 HOST = ''
@@ -27,6 +30,13 @@ class mythread(threading.Thread):  # thread definition updated in python 3.0
 
 # ---------------------------------------------Methodes------------------------------------------------------------------
 
+def check_online():
+    try:
+        _ = requests.head("http://www.google.com/", timeout=5)
+        return True
+    except requests.ConnectionError:
+        print("No internet connection available.")
+    return False
 
 def execute_command(command):
     # remove all the extra parameters from the socket connection and only work with json file
@@ -137,6 +147,9 @@ def automated_scan():
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+while not check_online():
+    print("no internet connection found")
+    sleep(2)
 
 if len(sys.argv) > 0:
     if sys.argv[0] == "-nowait":
