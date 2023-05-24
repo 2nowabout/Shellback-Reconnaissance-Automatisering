@@ -57,7 +57,6 @@ f = open("Resources/ipHack/ipAdressesToScan")  # get ip adresses from file
 threads = []
 threadnumber = 1
 f1 = f.readlines()
-version = 0
 
 for x in f1:
     while threading.active_count() > 10:  # dont go above 10 threads at the same time

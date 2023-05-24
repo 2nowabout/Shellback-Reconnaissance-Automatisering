@@ -3,7 +3,6 @@ import os
 import socket
 import sys
 import threading
-import urllib
 from time import sleep
 
 import requests
@@ -69,11 +68,6 @@ def update_website(json):
     websiteadresses = json["websites"]
     f = open("Resources/websiteScanner" + "ipToScan" + ".txt", "w+")
     f.write(json.dumps(websiteadresses))
-
-def update_companyname(json):
-    companyname = json["companyname"]
-    f = open
-
 
 def list_to_string(s):
     # initialize an empty string
