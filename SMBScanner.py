@@ -1,7 +1,6 @@
 import os
 import threading
 import time
-import sys
 import requests
 import json
 
@@ -59,11 +58,6 @@ threads = []
 threadnumber = 1
 f1 = f.readlines()
 version = 0
-
-#for setting in settings:
-#    if setting[0] != "#":    # skippen door alle lijnen van het document dat begint met een # voor comments
-#        if setting.__contains__("scansetting="):    # zoeken naar de juiste scansetting in de file
-#            version = int(setting.split("=")[1])
 
 for x in f1:
     while threading.active_count() > 10:  # dont go above 10 threads at the same time
