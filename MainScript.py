@@ -59,17 +59,20 @@ def execute_command(command):
     match json_object["command"]:
         case "start":
             automated_scan()
-        case "update_settings":
+        case "update_websites":
             settings = json_object["settings"]
-            update_settings(settings)
+            update_website(settings)
         case _:
             return
 
-def update_settings(json):
+def update_website(json):
     websiteadresses = json["websites"]
     f = open("Resources/websiteScanner" + "ipToScan" + ".txt", "w+")
     f.write(json.dumps(websiteadresses))
 
+def update_companyname(json):
+    companyname = json["companyname"]
+    f = open
 
 
 def list_to_string(s):
