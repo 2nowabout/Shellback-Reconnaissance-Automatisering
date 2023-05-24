@@ -2,8 +2,9 @@ import json
 import urllib
 
 import requests
-def sendMessagePost(url, data):
-    ip = requests.get('https://checkip.amazonaws.com').text.strip()
+
+
+def send_message_post(url, data):
     url = 'http://localhost:8002/' + url
     response = requests.post(url, json=data)
     if response.status_code == 200:
@@ -11,7 +12,8 @@ def sendMessagePost(url, data):
     else:
         print('Failed to send JSON data to the REST API.')
 
-def sendMessageGet(url):
+
+def send_message_get(url):
     ip = requests.get('https://checkip.amazonaws.com').text.strip()
     url = 'http://localhost:8002/' + url + ip
     response = requests.get(url)

@@ -5,14 +5,14 @@ import sys
 import requests
 import json
 
-from Sender import sendMessagePost
+from Sender import send_message_post
 
 # -------------------------------------Thread definition----------------------------------------------------------------
 
-class myThread(threading.Thread):  # thread definition updated in python 3.0
-    def __init__(self, threadID, name, adress, version):
+class my_thread(threading.Thread):  # thread definition updated in python 3.0
+    def __init__(self, thread_id, name, adress, version):
         threading.Thread.__init__(self)
-        self.threadID = threadID
+        self.thread_id = thread_id
         self.name = name
         self.adress = adress
         self.version = version
@@ -20,9 +20,9 @@ class myThread(threading.Thread):  # thread definition updated in python 3.0
     def run(self):
         print("Starting SMB " + self.name)
         if version == 1:
-            run_SMBProtocol_scan(self.adress, self.name, self.version)  #run_scan uitvoeren als main methode
+            run_smb_protocol_scan(self.adress)  #run_scan uitvoeren als main methode
         elif version == 2:
-            run_SMB2_scan()
+            run_smb2_scan(self.adress)
         print("Exiting SMB " + self.name)
 
 
@@ -30,7 +30,7 @@ class myThread(threading.Thread):  # thread definition updated in python 3.0
 
 # ---------------------------------------------Methodes------------------------------------------------------------------
 
-def run_SMBProtocol_scan(adress, threadName, version):  # scan def for threads to run
+def run_smb_protocol_scan(adress):  # scan def for threads to run
     stream = os.popen(
         'sudo nmap --script=smb-protocols -p 137,139,445 ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
     output = stream.read()
@@ -40,7 +40,7 @@ def run_SMBProtocol_scan(adress, threadName, version):  # scan def for threads t
     t.write(output)  # fill the text file
     t.close()
 
-def run_SMB2_scan(adress, threadName, version):  # scan def for threads to run
+def run_smb2_scan(adress):  # scan def for threads to run
     stream = os.popen(
         'sudo nmap --script=smb2-security-mode -p 137,139,445 ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
     output = stream.read()
@@ -69,8 +69,8 @@ for x in f1:
     while threading.active_count() > 10:  # dont go above 10 threads at the same time
         print("SMB Scanner max threads achived, waiting for space\n")
         time.sleep(10)
-    thread = myThread(1, "Thread-" + str(threadnumber), x, 1)  # creating thread
-    thread2 = myThread(1, "Thread-" + str(threadnumber), x, 1)
+    thread = my_thread(1, "Thread-" + str(threadnumber), x, 1)  # creating thread
+    thread2 = my_thread(1, "Thread-" + str(threadnumber), x, 1)
     thread.start()   # starten van thread. hier word de def run uitgevoerd van de thread
     thread2.start()
     threads.append(thread)  # add to pool
@@ -82,4 +82,4 @@ f1.clear()
 
 ip = requests.get('https://checkip.amazonaws.com').text.strip()
 json = json.loads('{"type":5,"ipadress":"' + ip + '","value":"SMB scanning complete"}')
-sendMessagePost("addNotification", json)
+send_message_post("addNotification", json)

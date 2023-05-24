@@ -12,10 +12,10 @@ BUFFER_SIZE = 1
 
 # -------------------------------------Thread definition----------------------------------------------------------------
 
-class myThread(threading.Thread):  # thread definition updated in python 3.0
-    def __init__(self, threadID, name, command):
+class mythread(threading.Thread):  # thread definition updated in python 3.0
+    def __init__(self, thread_id, name, command):
         threading.Thread.__init__(self)
-        self.threadID = threadID
+        self.thread_id = thread_id
         self.name = name
         self.command = command
 
@@ -62,7 +62,7 @@ def update_settings(json):
 
 
 
-def listToString(s):
+def list_to_string(s):
     # initialize an empty string
     str1 = ""
     s = s.decode('utf-8')
@@ -70,9 +70,7 @@ def listToString(s):
     for ele in s:
         if ele != ";":
             str1 += ele
-
-    # return string
-    return str1
+    return str1 # return string
 
 
 def server_socket():
@@ -96,18 +94,15 @@ def server_socket():
 
     message = ''
     while 1:  # Accept connections from multiple clients
-        conn, addr = soc.accept()
+        conn, _ = soc.accept()
         while 1:  # Accept multiple messages from each client
-            # buffer = conn.recv(BUFFER_SIZE)
-            # buffer = buffer.decode()
             data = conn.recv(1024)
             if not data:
                 conn.close()
                 data.clear()
-                buffer = ""
                 break
             else:
-                execute_command(listToString(data))
+                execute_command(list_to_string(data))
                 conn.send(b'''HTTP/1.0 200 OK
                           Content-Type: text/plain
                           Connection successful
@@ -135,7 +130,7 @@ def automated_scan():
     commands.append("sudo python3 SMBScanner.py")
     commands.append("sudo python3 WebsiteScanner.py")
     for i in commands:
-        thread = myThread(threadnumber, "Thread-" + str(threadnumber), i)  # creating thread
+        thread = mythread(threadnumber, "Thread-" + str(threadnumber), i)  # creating thread
         thread.start()
         threads.append(thread)  # add to pool
         threadnumber = threadnumber + 1

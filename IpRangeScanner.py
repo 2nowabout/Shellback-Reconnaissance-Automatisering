@@ -1,13 +1,13 @@
 import os
 import socket
 import json
-from Sender import sendMessagePost
+from Sender import send_message_post
 import requests
 
 
 def count_lines(filename):
     with open(filename, 'r') as file:
-        line_count = sum(1 for line in file)
+        line_count = sum(1 for _ in file)
     return line_count
 
 
@@ -31,4 +31,4 @@ amountOfIps = count_lines("Resources/ipHack/ipAdressesToScan")
 ip = requests.get('https://checkip.amazonaws.com').text.strip()
 json = json.loads(
     '{"type":5,"ipadress":"' + ip + '","value":"ip range scan complete, "' + str(amountOfIps) + 'ips found"}')
-sendMessagePost("addNotification", json)
+send_message_post("addNotification", json)

@@ -1,9 +1,8 @@
 import os
 import time
 
-from Sender import sendMessagePost
+from Sender import send_message_post
 
 while 1:
-    sendMessagePost("alive", '{"alive": true}')
-    #stream = os.popen('nmap -p <port_number> 176.57.189.22')
+    send_message_post("alive", '{"alive": true}')
     time.sleep(60)

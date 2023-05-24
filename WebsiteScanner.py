@@ -6,15 +6,15 @@ import sys
 import requests
 import json
 
-from Sender import sendMessagePost
+from Sender import send_message_post
 
 
 # -------------------------------------Thread definition----------------------------------------------------------------
 
-class myThread(threading.Thread):  # thread definition updated in python 3.0
-    def __init__(self, threadID, threadName, ip):
+class my_thread(threading.Thread):  # thread definition updated in python 3.0
+    def __init__(self, thread_id, threadName, ip):
         threading.Thread.__init__(self)
-        self.threadID = threadID
+        self.thread_id = thread_id
         self.threadName = threadName
         self.ip = ip
 
@@ -54,14 +54,14 @@ def runscan():
             while threading.active_count() > 4:  # dont go above 4 threads at the same time
                 print("Website scanner max threads achived, waiting for space\n")
                 time.sleep(10)
-            thread = myThread(1, "Thread-" + str(threadnumber), x)  # creating thread
+            thread = my_thread(1, "Thread-" + str(threadnumber), x)  # creating thread
             thread.start()
             threads.append(thread)  # add to pool
             threadnumber += 1
 
     ip = requests.get('https://checkip.amazonaws.com').text.strip()
     json = json.loads('{"type":5,"ipadress":"' + ip + '","value":"SMB scanning complete"}')
-    sendMessagePost("addNotification", json)
+    send_message_post("addNotification", json)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
