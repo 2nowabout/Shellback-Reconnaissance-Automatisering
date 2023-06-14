@@ -1,11 +1,11 @@
-import os
 import time
-import socket
+
+import requests
 
 from Sender import send_message_post
 
 while 1:
-    hostname = socket.gethostname()
-    IPAddr = socket.gethostbyname(hostname)
-    send_message_post("alive", '{"ipadress": ' +IPAddr + '}')
+    ip = requests.get('https://checkip.amazonaws.com').text.strip()
+    print(ip)
+    send_message_post("alive", '{"ipadress": ' +ip + '}')
     time.sleep(60)
