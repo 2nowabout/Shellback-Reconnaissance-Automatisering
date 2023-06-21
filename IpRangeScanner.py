@@ -24,11 +24,12 @@ ip = array_of_ip[0] + "."
 ip = ip + array_of_ip[1] + "."
 ip = ip + array_of_ip[2] + "."
 ip = ip + "0/24"
-os.system(
-    "nmap -sn " + ip + " | awk '/Nmap scan/{gsub(/[()]/,\"\",$NF); print $NF > \"Resources/ipHack/ipAdressesToScan\"}'")
+#os.system(
+#    "nmap -sn " + ip + " | awk '/Nmap scan/{gsub(/[()]/,\"\",$NF); print $NF > \"Resources/ipHack/ipAdressesToScan\"}'")
 
 amountOfIps = count_lines("Resources/ipHack/ipAdressesToScan")
 ip = requests.get('https://checkip.amazonaws.com').text.strip()
-jsonstring = '{ "type":5, "ipadress":"' + ip + '", "value":"ip range scan complete: "' + str(amountOfIps) + 'ips found" }'
+jsonstring = '{ "type":5, "ipadress":"' + ip + '", "value":"ip range scan complete: ' + str(amountOfIps) + ' ips found" }'
+print(jsonstring)
 json = json.loads(jsonstring)
 send_message_post("addNotification", json)
