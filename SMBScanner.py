@@ -18,9 +18,9 @@ class my_thread(threading.Thread):  # thread definition updated in python 3.0
 
     def run(self):
         print("Starting SMB " + self.name)
-        if version == 1:
+        if self.version == 1:
             run_smb_protocol_scan(self.adress)  #run_scan uitvoeren als main methode
-        elif version == 2:
+        elif self.version == 2:
             run_smb2_scan(self.adress)
         print("Exiting SMB " + self.name)
 
