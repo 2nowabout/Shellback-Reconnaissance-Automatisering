@@ -60,9 +60,10 @@ f1 = f.readlines()
 
 for x in f1:
     while threading.active_count() > 10:  # dont go above 10 threads at the same time
-        print("SMB Scanner max threads achived, waiting for space\n")
+        print("SMB Scanner max threads achived, waiting for space")
         time.sleep(10)
     thread = my_thread(1, "Thread-" + str(threadnumber), x, 1)  # creating thread
+    threadnumber += 1
     thread2 = my_thread(1, "Thread-" + str(threadnumber), x, 1)
     thread.start()   # starten van thread. hier word de def run uitgevoerd van de thread
     thread2.start()

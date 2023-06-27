@@ -50,7 +50,7 @@ version = 0
 
 for x in f1:
     while threading.active_count() > 10:  # dont go above 10 threads at the same time
-        print("Network scanner max threads achived, waiting for space\n")
+        print("Network scanner max threads achived, waiting for space")
         time.sleep(10)
     thread = my_thread(1, "Thread-" + str(threadnumber), x, version)  # creating thread
     thread.start()   # starten van thread. hier word de def run uitgevoerd van de thread
