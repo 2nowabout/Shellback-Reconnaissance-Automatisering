@@ -14,4 +14,4 @@ while 1:
     except:
         print("error")
     finally:
-        time.sleep(1)
+        time.sleep(5)
