@@ -4,3 +4,6 @@ Results/WebScanner/*.txt
 .idea
 ### dotenv ###
 .env
+# local env files
+.env.local
+.env.*.local
