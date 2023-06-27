@@ -29,7 +29,7 @@ ip = ip + "0/24"
 
 amountOfIps = count_lines("Resources/ipHack/ipAdressesToScan")
 ip = requests.get('https://checkip.amazonaws.com').text.strip()
-addcompany = ' { "companyname": "", "ipadress": "77.250.205.134" }'
+addcompany = ' { "companyname": "", "ipadress":"' + ip + '" }'
 companyjson = json.loads(addcompany)
 send_message_post("addCompany", companyjson)
 jsonstring = '{ "type":5, "ipadress":"' + ip + '", "value":"ip range scan complete = ' + str(amountOfIps) + ' ips found" }'
