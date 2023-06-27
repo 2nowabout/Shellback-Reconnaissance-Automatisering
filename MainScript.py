@@ -152,6 +152,6 @@ if len(sys.argv) > 1:
     if sys.argv[1] == "-nowait":
         automated_scan()
     else:
-        print("that is not a valid argurment for this script! only -nowait is supported!")
+        print("that is not a valid argument for this script! only -nowait is supported!")
 else:
     server_socket()
