@@ -52,13 +52,13 @@ def run_scan(adress):  # scan def for threads to run
         score = get_cve_score(cve_id)
         jsonstring = ""
         if float(score) < 4.0:
-            jsonstring = '{ "type":1,"ipaddress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
+            jsonstring = '{ "type":1,"ipadress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
         elif 3.9 < float(score) < 7.0:
-            jsonstring = '{ "type":2,"ipaddress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
+            jsonstring = '{ "type":2,"ipadress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
         elif 6.9 < float(score) < 9.0:
-            jsonstring = '{ "type":3,"ipaddress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
+            jsonstring = '{ "type":3,"ipadress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
         elif 8.9 < float(score):
-            jsonstring = '{ "type":4,"ipaddress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
+            jsonstring = '{ "type":4,"ipadress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
         json = json.loads(jsonstring)
         send_message_post("addNotification", json)
         print(f"CVE ID: {cve_id}, Score: {score}")
