@@ -35,7 +35,10 @@ def get_cve_score(cve_id):
     soup = BeautifulSoup(response.content, "html.parser")
 
     cvss_link = soup.find("a", id="Cvss2CalculatorAnchor")
-    cvss_score = cvss_link.text.strip().split()[0]
+    try:
+        cvss_score = cvss_link.text.strip().split()[0]
+    except:
+        return 0
     return cvss_score
 
 def extract_cve_ids(scan_report):
@@ -50,6 +53,8 @@ def run_scan(adress):  # scan def for threads to run
     ip = requests.get('https://checkip.amazonaws.com').text.strip()
     for cve_id in cve_ids:
         score = get_cve_score(cve_id)
+        if score == 0:
+            continue
         jsonstring = ""
         if float(score) < 4.0:
             jsonstring = '{ "type":1,"ipadress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
