@@ -1,7 +1,9 @@
 import os
+import re
 import threading
 import time
 import json
+from bs4 import BeautifulSoup
 
 import requests
 
@@ -27,10 +29,39 @@ class my_thread(threading.Thread):  # thread definition updated in python 3.0
 
 # ---------------------------------------------Methodes------------------------------------------------------------------
 
+def get_cve_score(cve_id):
+    url = f"https://nvd.nist.gov/vuln/detail/{cve_id}"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, "html.parser")
+
+    cvss_link = soup.find("a", id="Cvss2CalculatorAnchor")
+    cvss_score = cvss_link.text.strip().split()[0]
+    return cvss_score
+
+def extract_cve_ids(scan_report):
+    cve_ids = re.findall(r"\[CVE-\d+-\d+\]", scan_report)
+    return cve_ids
+
 def run_scan(adress):  # scan def for threads to run
     stream = os.popen(
         'nmap -sV --script=vulscan/vulscan.nse --script-args vulscandb=cve.csv -T2 -v -Pn -A ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
     output = stream.read()
+    cve_ids = extract_cve_ids(output)
+    ip = requests.get('https://checkip.amazonaws.com').text.strip()
+    for cve_id in cve_ids:
+        score = get_cve_score(cve_id)
+        jsonstring = ""
+        if float(score) < 4.0:
+            jsonstring = '{ "type":1,"ipaddress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
+        elif 3.9 < float(score) < 7.0:
+            jsonstring = '{ "type":2,"ipaddress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
+        elif 6.9 < float(score) < 9.0:
+            jsonstring = '{ "type":3,"ipaddress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
+        elif 8.9 < float(score):
+            jsonstring = '{ "type":4,"ipaddress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
+        json = json.loads(jsonstring)
+        send_message_post("addNotification", json)
+        print(f"CVE ID: {cve_id}, Score: {score}")
     adressfordocument = adress.replace(".", "_")
     adressfordocument = str(adressfordocument)
     t = open("Results/NetworkScan/" + adressfordocument + ".txt", "w+")  # make a text file with the name of the adress

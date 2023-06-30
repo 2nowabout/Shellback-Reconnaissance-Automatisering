@@ -1,16 +1,16 @@
-import sys
+import requests
+from bs4 import BeautifulSoup
 
-print("number of arguments: ", len(sys.argv))
-print("argument List: ", str(sys.argv))
-if(sys.argv[1] == "1"):
-    print("1 DETECTED")
+def get_cve_score(cve_id):
+    url = f"https://nvd.nist.gov/vuln/detail/{cve_id}"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, "html.parser")
 
-test = "scansetting=1"
-print(test.split("=")[1])
+    cvss_link = soup.find("a", id="Cvss2CalculatorAnchor")
+    cvss_score = cvss_link.text.strip().split()[0]
+    return cvss_score
 
-commands = []
-commands.append("sudo python3 PasswordCracker.py 1")
-commands.append("sudo python3 NetworkScanner.py 1")
-commands.append("sudo python3 WebsiteScanner.py 1")
-for i in commands:
-    print(i)
+# Example usage:
+cve_id = "CVE-2012-3411"
+cvss_score = get_cve_score(cve_id)
+print(f"CVSS Score for {cve_id}: {cvss_score}")
