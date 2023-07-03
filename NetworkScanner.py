@@ -31,6 +31,7 @@ class my_thread(threading.Thread):  # thread definition updated in python 3.0
 
 def get_cve_score(cve_id):
     url = f"https://nvd.nist.gov/vuln/detail/{cve_id}"
+    print(url)
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
 
@@ -43,6 +44,7 @@ def get_cve_score(cve_id):
 
 def extract_cve_ids(scan_report):
     cve_ids = re.findall(r"\[CVE-\d+-\d+\]", scan_report)
+    cve_ids = [cve_id.strip("[]") for cve_id in cve_ids]
     return cve_ids
 
 def run_scan(adress):  # scan def for threads to run
@@ -52,9 +54,9 @@ def run_scan(adress):  # scan def for threads to run
     cve_ids = extract_cve_ids(output)
     ip = requests.get('https://checkip.amazonaws.com').text.strip()
     for cve_id in cve_ids:
-        print(cve_id)
         score = get_cve_score(cve_id)
         if score == "empty":
+            print("continue")
             continue
         jsonstring = ""
         if float(score) < 4.0:
@@ -65,8 +67,8 @@ def run_scan(adress):  # scan def for threads to run
             jsonstring = '{ "type":3,"ipadress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
         elif 8.9 < float(score):
             jsonstring = '{ "type":4,"ipadress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
-        json = json.loads(jsonstring)
-        send_message_post("addNotification", json)
+        json_object = json.loads(jsonstring)
+        send_message_post("addNotification", json_object)
         print(f"CVE ID: {cve_id}, Score: {score}")
     adressfordocument = adress.replace(".", "_")
     adressfordocument = str(adressfordocument)
@@ -74,30 +76,43 @@ def run_scan(adress):  # scan def for threads to run
     t.write(output)  # fill the text file
     t.close()
 
-
 # ----------------------------------------------------------------------------------------------------------------------
 
 # -------------------------------------------Normal code----------------------------------------------------------------
 
-f = open("Resources/ipHack/ipAdressesToScan")  # get ip adresses from file
-threads = []
-threadnumber = 1
-f1 = f.readlines()
-version = 0
-
-for x in f1:
-    while threading.active_count() > 10:  # dont go above 10 threads at the same time
-        print("Network scanner max threads achived, waiting for space")
-        time.sleep(10)
-    thread = my_thread(1, "Thread-" + str(threadnumber), x, version)  # creating thread
-    thread.start()   # starten van thread. hier word de def run uitgevoerd van de thread
-    threads.append(thread)  # add to pool
-    threadnumber += 1
-
-f.close()
-f1.clear()
-
-ip = requests.get('https://checkip.amazonaws.com').text.strip()
-json = json.loads('{"type":5,"ipadress":"' + ip + '","value":"nmap vulscan complete"}')
-send_message_post("addNotification", json)
-
+# f = open("Resources/ipHack/ipAdressesToScan")  # get ip adresses from file
+# threads = []
+# threadnumber = 1
+# f1 = f.readlines()
+# version = 0
+#
+# for x in f1:
+#     while threading.active_count() > 10:  # dont go above 10 threads at the same time
+#         print("Network scanner max threads achived, waiting for space")
+#         time.sleep(10)
+#     thread = my_thread(1, "Thread-" + str(threadnumber), x, version)  # creating thread
+#     thread.start()   # starten van thread. hier word de def run uitgevoerd van de thread
+#     threads.append(thread)  # add to pool
+#     threadnumber += 1
+#
+# f.close()
+# f1.clear()
+#
+# ip = requests.get('https://checkip.amazonaws.com').text.strip()
+# json = json.loads('{"type":5,"ipadress":"' + ip + '","value":"nmap vulscan complete"}')
+# send_message_post("addNotification", json)
+list = []
+list.append("[CVE-2013-0198]")
+list.append("[CVE-2012-3411]")
+list.append("[CVE-2009-2958]")
+list.append("[CVE-2009-2957]")
+list.append("[CVE-2008-3350]")
+list.append("[CVE-2008-3214]")
+list.append("[CVE-2006-2017]")
+list.append("[CVE-2005-0877]")
+list.append("[CVE-2005-0876]")
+list.append("[CVE-2013-1462]")
+list.append("[CVE-2013-1461]")
+list.append("[CVE-2013-0230]")
+list.append("[CVE-2013-0229]")
+test(list)
