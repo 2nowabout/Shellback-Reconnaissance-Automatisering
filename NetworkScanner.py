@@ -38,7 +38,7 @@ def get_cve_score(cve_id):
     try:
         cvss_score = cvss_link.text.strip().split()[0]
     except:
-        return 0
+        return "empty"
     return cvss_score
 
 def extract_cve_ids(scan_report):
@@ -54,7 +54,7 @@ def run_scan(adress):  # scan def for threads to run
     for cve_id in cve_ids:
         print(cve_id)
         score = get_cve_score(cve_id)
-        if score == 0:
+        if score == "empty":
             continue
         jsonstring = ""
         if float(score) < 4.0:
