@@ -48,6 +48,7 @@ def extract_cve_ids(scan_report):
     return cve_ids
 
 def run_scan(adress):  # scan def for threads to run
+    global jsonstring
     stream = os.popen(
         'nmap -sV --script=vulscan/vulscan.nse --script-args vulscandb=cve.csv -T2 -v -Pn -A ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
     output = stream.read()
@@ -58,15 +59,15 @@ def run_scan(adress):  # scan def for threads to run
         if score == "empty":
             print("continue")
             continue
-        jsonstring = ""
         if float(score) < 4.0:
             jsonstring = '{ "type":1,"ipadress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
-        elif 3.9 < float(score) < 7.0:
+        elif 4.0 <= float(score) < 7.0:
             jsonstring = '{ "type":2,"ipadress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
-        elif 6.9 < float(score) < 9.0:
+        elif 7.0 <= float(score) < 9.0:
             jsonstring = '{ "type":3,"ipadress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
-        elif 8.9 < float(score):
+        elif 9.0 <= float(score):
             jsonstring = '{ "type":4,"ipadress":"' + ip + '","value":"CVE found, CVE Score: ' + score + '"}'
+        print("jsonstring: " + jsonstring)
         json_object = json.loads(jsonstring)
         send_message_post("addNotification", json_object)
         print(f"CVE ID: {cve_id}, Score: {score}")
