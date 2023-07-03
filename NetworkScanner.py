@@ -52,6 +52,7 @@ def run_scan(adress):  # scan def for threads to run
     cve_ids = extract_cve_ids(output)
     ip = requests.get('https://checkip.amazonaws.com').text.strip()
     for cve_id in cve_ids:
+        print(cve_id)
         score = get_cve_score(cve_id)
         if score == 0:
             continue
