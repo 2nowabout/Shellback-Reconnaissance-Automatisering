@@ -100,6 +100,6 @@ f.close()
 f1.clear()
 
 ip = requests.get('https://checkip.amazonaws.com').text.strip()
-json = json.loads('{"type":5,"ipadress":"' + ip + '","value":"nmap vulscan complete"}')
-send_message_post("addNotification", json)
+jsonobject = json.loads('{"type":5,"ipadress":"' + ip + '","value":"nmap vulscan complete"}')
+send_message_post("addNotification", jsonobject)
 
