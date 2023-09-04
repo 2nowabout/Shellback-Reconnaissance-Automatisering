@@ -3,6 +3,7 @@ import os
 import socket
 import sys
 import threading
+import time
 from time import sleep
 
 import requests
@@ -66,6 +67,7 @@ def execute_command(command):
             update_website(settings)
         case _:
             return
+    pass
 
 
 def update_website(json):
@@ -102,23 +104,38 @@ def server_socket():
               + str(message[0]) + ' Message '
               + message[1])
         sys.exit()
-    soc.listen(5)
+    soc.listen()
 
-    message = ''
-    while 1:  # Accept connections from multiple clients
-        conn, _ = soc.accept()
-        while 1:  # Accept multiple messages from each client
-            data = conn.recv(1024)
-            if not data:
+    while True:  # Accept connections from multiple clients
+        conn, addr = soc.accept()
+        print(f"Connected by {addr}")
+
+        while True:  # Accept multiple messages from each client
+            try:
+                data = conn.recv(1024)
+                if not data:
+                    conn.close()
+                    print(f"Connection closed by {addr}")
+                    break  # Exit the inner loop when the client disconnects
+                else:
+                    command = data.decode('utf-8')
+                    #response = f'''HTTP/1.1 200 OK\r
+                    #Content-Type: text/plain\r
+                    #Connection successful
+                    #'''
+                    #conn.send(response.encode('utf-8'))
+                    response = f'''HTTP/1.0 200 OK\r
+                    Content-Type: text/plain\r
+                    Connection: close\r\n\r
+                    Connection Succesfull'''
+                    conn.send(response.encode('utf-8'))
+                    threading.Thread(target=execute_command, args=(command,)).start()
+            except Exception as e:
+                print(e)
                 conn.close()
-                data.clear()
-                break
-            else:
-                execute_command(list_to_string(data))
-                conn.send(b'''HTTP/1.0 200 OK
-                          Content-Type: text/plain
-                          Connection successful
-                          ''')
+                print(f"Connection closed by {addr}")
+                break  # Exit the inner loop on error
+            finally:
                 conn.close()
 
 
