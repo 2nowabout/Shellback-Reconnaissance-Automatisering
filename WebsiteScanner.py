@@ -61,7 +61,7 @@ def runscan():
 
     ip = requests.get('https://checkip.amazonaws.com').text.strip()
     json = json.loads('{"type":5,"ipadress":"' + ip + '","value":"SMB scanning complete"}')
-    send_message_post("addNotification", json)
+    send_message_post("/addNotification", json)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

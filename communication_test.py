@@ -11,6 +11,6 @@ json = json.loads('{"type":5,"ipadress":"' + ip + '","value":"communication test
 result = None
 while result is None:
     try:
-        result = send_message_post("addNotification", json)
+        result = send_message_post("/addNotification", json)
     except Exception as e:
         print(e)

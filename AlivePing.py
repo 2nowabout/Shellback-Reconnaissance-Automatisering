@@ -10,7 +10,7 @@ print(ip)
 json = json.loads('{"ipadress": "' + ip + '"}')
 while 1:
     try:
-        send_message_post("alive", json)
+        send_message_post("/alive", json)
     except Exception as e:
         print(e)
     time.sleep(5)

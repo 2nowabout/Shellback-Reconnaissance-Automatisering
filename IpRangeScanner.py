@@ -35,4 +35,4 @@ send_message_post("addCompany", companyjson)
 jsonstring = '{ "type":5, "ipadress":"' + ip + '", "value":"ip range scan complete = ' + str(amountOfIps) + ' ips found" }'
 print(jsonstring)
 json = json.loads(jsonstring)
-send_message_post("addNotification", json)
+send_message_post("/addNotification", json)
