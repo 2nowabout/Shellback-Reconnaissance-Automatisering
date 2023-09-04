@@ -67,7 +67,6 @@ def execute_command(command):
             update_website(settings)
         case _:
             return
-    pass
 
 
 def update_website(json):
