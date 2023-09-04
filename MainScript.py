@@ -119,11 +119,6 @@ def server_socket():
                     break  # Exit the inner loop when the client disconnects
                 else:
                     command = data.decode('utf-8')
-                    #response = f'''HTTP/1.1 200 OK\r
-                    #Content-Type: text/plain\r
-                    #Connection successful
-                    #'''
-                    #conn.send(response.encode('utf-8'))
                     response = f'''HTTP/1.0 200 OK\r
                     Content-Type: text/plain\r
                     Connection: close\r\n\r
