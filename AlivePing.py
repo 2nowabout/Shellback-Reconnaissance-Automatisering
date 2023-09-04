@@ -13,5 +13,4 @@ while 1:
         send_message_post("alive", json)
     except Exception as e:
         print(e)
-        pass
     time.sleep(5)

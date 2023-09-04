@@ -14,4 +14,3 @@ while result is None:
         result = send_message_post("addNotification", json)
     except Exception as e:
         print(e)
-        pass
