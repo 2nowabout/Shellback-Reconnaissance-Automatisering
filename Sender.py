@@ -5,6 +5,7 @@ import requests
 from dotenv import load_dotenv
 
 baseurl = ''
+token = ''
 
 def send_message_post(url, data):
     setup()
@@ -30,7 +31,37 @@ def send_message_get(url):
 
 def setup():
     global baseurl
+    global token
     load_dotenv()
     baseurl = os.getenv("BASE_URL")
+    username = os.getenv("USERNAME")
+    password = os.getenv("PASSWORD")
+    credentials = {
+        "username": username,
+        "password": password
+    }
+
+    # Define the authentication endpoint
+    auth_endpoint = f"{baseurl}/login"  # Replace with the actual authentication endpoint
+
+    try:
+        # Send a POST request to authenticate and receive a token
+        response = requests.post(auth_endpoint, json=credentials)
+
+        if response.status_code == 200:
+            # Authentication successful, extract the token from the response JSON
+            token = response.json().get("token")
+
+            if token:
+                print(f"Authentication successful. Received token: {token}")
+            else:
+                print("Token not found in the response.")
+        else:
+            print(f"Authentication failed with status code {response.status_code}: {response.text}")
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+
+
 
 
