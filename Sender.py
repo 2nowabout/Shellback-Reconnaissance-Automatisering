@@ -13,6 +13,11 @@ def send_message_post(url, data):
     response = requests.post(url, json=data)
     if response.status_code == 200:
         print('JSON data was successfully sent to the REST API.')
+    elif response.status_code == 401:
+        setup()
+        response = requests.post(url, json=data)
+        if response.status_code == 200:
+            print('refresh of token was needed')
     else:
         print('Failed to send JSON data to the REST API.')
         raise ConnectionError
@@ -53,7 +58,7 @@ def setup():
             token = response.json().get("token")
 
             if token:
-                print(f"Authentication successful. Received token: {token}")
+                print(f"Authentication successful.")
             else:
                 print("Token not found in the response.")
         else:
