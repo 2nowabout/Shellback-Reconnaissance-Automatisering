@@ -38,7 +38,8 @@ def get_cve_score(cve_id):
     cvss_link = soup.find("a", id="Cvss2CalculatorAnchor")
     try:
         cvss_score = cvss_link.text.strip().split()[0]
-    except:
+    except Exception as e:
+        print(e)
         return "empty"
     return cvss_score
 

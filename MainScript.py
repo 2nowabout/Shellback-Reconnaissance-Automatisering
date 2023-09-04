@@ -12,6 +12,7 @@ HOST = ''
 data = []
 BUFFER_SIZE = 1
 
+
 # -------------------------------------Thread definition----------------------------------------------------------------
 
 class mythread(threading.Thread):  # thread definition updated in python 3.0
@@ -37,6 +38,7 @@ def check_online():
         print("No internet connection available.")
     return False
 
+
 def execute_command(command):
     # remove all the extra parameters from the socket connection and only work with json file
     foundbegin = False
@@ -50,8 +52,9 @@ def execute_command(command):
     # load string to json
     try:
         json_object = json.loads(execute)
-    except:
+    except Exception as e:
         print("command was not a json file")
+        print(e)
         return
 
     # read command from json and execute appropriately
@@ -64,10 +67,12 @@ def execute_command(command):
         case _:
             return
 
+
 def update_website(json):
     websiteadresses = json["websites"]
     f = open("Resources/websiteScanner" + "ipToScan" + ".txt", "w+")
     f.write(json.dumps(websiteadresses))
+
 
 def list_to_string(s):
     # initialize an empty string
@@ -77,7 +82,7 @@ def list_to_string(s):
     for ele in s:
         if ele != ";":
             str1 += ele
-    return str1 # return string
+    return str1
 
 
 def server_socket():

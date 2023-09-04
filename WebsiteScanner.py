@@ -12,16 +12,16 @@ from Sender import send_message_post
 # -------------------------------------Thread definition----------------------------------------------------------------
 
 class my_thread(threading.Thread):  # thread definition updated in python 3.0
-    def __init__(self, thread_id, threadName, ip):
+    def __init__(self, thread_id, threadname, ip):
         threading.Thread.__init__(self)
         self.thread_id = thread_id
-        self.threadName = threadName
+        self.threadname = threadname
         self.ip = ip
 
     def run(self):
-        print("Starting " + self.threadName)
-        move_file(self.threadName, self.ip)
-        print("Exiting " + self.threadName)
+        print("Starting " + self.threadname)
+        move_file(self.threadname, self.ip)
+        print("Exiting " + self.threadname)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -34,8 +34,8 @@ automated = False
 
 # ---------------------------------------------Methodes------------------------------------------------------------------
 
-def move_file(threadName, ip):  # scan def for threads to run
-    print(threadName + " works")
+def move_file(threadname, ip):  # scan def for threads to run
+    print(threadname + " works")
     adjustedx = ip.replace("/", "_")  # cant write a file with a / in the name
     os.system(
         "sudo nikto -o " + adjustedx + ".txt -Format txt -Tuning x 6 -Option USERAGENT=Mozilla -h " + ip + " -ssl -C all")  # nikto scan on ip, Tuning 6 enables all except DOS scans
