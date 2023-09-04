@@ -14,7 +14,7 @@ def send_message_post(url, data):
     if response.status_code == 200:
         print('JSON data was successfully sent to the REST API.')
     elif response.status_code == 401:
-        setup()
+        getToken()
         response = requests.post(url, json=data)
         if response.status_code == 200:
             print('refresh of token was needed')
@@ -39,6 +39,13 @@ def setup():
     global token
     load_dotenv()
     baseurl = os.getenv("BASE_URL")
+    if token == '':
+        getToken()
+
+
+def getToken():
+    global token
+    load_dotenv()
     username = os.getenv("USERNAME")
     password = os.getenv("PASSWORD")
     credentials = {
@@ -66,7 +73,5 @@ def setup():
 
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
-
-
 
 
