@@ -11,7 +11,7 @@ json = json.loads('{"ipadress": "' + ip + '"}')
 while 1:
     try:
         send_message_post("alive", json)
-    except:
-        print("error")
-    finally:
-        time.sleep(5)
+    except Exception as e:
+        print(e)
+        pass
+    time.sleep(5)

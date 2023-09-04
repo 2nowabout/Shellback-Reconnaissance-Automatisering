@@ -14,6 +14,7 @@ def send_message_post(url, data):
         print('JSON data was successfully sent to the REST API.')
     else:
         print('Failed to send JSON data to the REST API.')
+        raise ConnectionError
 
 
 def send_message_get(url):
@@ -25,6 +26,7 @@ def send_message_get(url):
         print('get was successfully sent to the REST API.')
     else:
         print('Failed to send to the REST API.')
+        raise ConnectionError
 
 def setup():
     global baseurl
