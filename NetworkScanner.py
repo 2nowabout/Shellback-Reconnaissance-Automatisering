@@ -51,7 +51,7 @@ def extract_cve_ids(scan_report):
 def run_scan(adress):  # scan def for threads to run
     global jsonstring
     stream = os.popen(
-        'nmap -sV --script=vulscan/vulscan.nse --script-args vulscandb=cve.csv -T2 -v -Pn -A ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
+        'nmap -sV --script=vulscan/vulscan.nse --script-args vulscandb=cve.csv -T1 -v -Pn -A ' + adress)  # --script vulscan is a custom script that connects vuln databases to check
     output = stream.read()
     cve_ids = extract_cve_ids(output)
     ip = requests.get('https://checkip.amazonaws.com').text.strip()
